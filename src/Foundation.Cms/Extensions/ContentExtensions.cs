@@ -3,6 +3,7 @@ using EPiServer.Core;
 using EPiServer.Filters;
 using EPiServer.Framework.Web;
 using EPiServer.ServiceLocation;
+using Foundation.Cms.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Foundation.Cms.Extensions
 {
     public static class ContentExtensions
     {
-        private static readonly CookieService _cookieService = new CookieService();
+        private static readonly Lazy<ICookieService> _cookieService = new Lazy<ICookieService>(() => ServiceLocator.Current.GetInstance<ICookieService>());
         private static readonly Injected<IContentLoader> _contentLoader = default(Injected<IContentLoader>);
         private const string Delimiter = "^!!^";
 
@@ -54,7 +55,7 @@ namespace Foundation.Cms.Extensions
         public static void AddPageBrowseHistory(this PageData page)
         {
 
-            var history = _cookieService.Get("PageBrowseHistory");
+            var history = _cookieService.Value.Get("PageBrowseHistory");
             var values = string.IsNullOrEmpty(history) ? new List<int>() :
                 history.Split(new[] { Delimiter }, StringSplitOptions.RemoveEmptyEntries).Select(x => Convert.ToInt32(x)).ToList();
 
@@ -73,12 +74,12 @@ namespace Foundation.Cms.Extensions
 
             values.Add(page.ContentLink.ID);
 
-            _cookieService.Set("PageBrowseHistory", string.Join(Delimiter, values));
+            _cookieService.Value.Set("PageBrowseHistory", string.Join(Delimiter, values));
         }
 
         public static IList<PageData> GetPageBrowseHistory()
         {
-            var pageIds = _cookieService.Get("PageBrowseHistory");
+            var pageIds = _cookieService.Value.Get("PageBrowseHistory");
             if (string.IsNullOrEmpty(pageIds))
             {
                 return new List<PageData>();
