@@ -20,13 +20,14 @@ namespace Foundation.Cms.Blocks
             get
             {
                 var linkName = this["YouTubeLink"] as string;
+
                 if (string.IsNullOrEmpty(linkName))
                 {
                     return null;
                 }
 
-                if (!linkName.Contains("youtube") || !linkName.Contains("/watch?v=") && !linkName.Contains("/v/") &&
-                    !linkName.Contains("/embed/"))
+                if ((!linkName.Contains("youtube") || !linkName.Contains("/watch?v=") && !linkName.Contains("/v/") &&
+                    !linkName.Contains("/embed/")) && !linkName.Contains("youtu.be"))
                 {
                     return null;
                 }
@@ -38,6 +39,21 @@ namespace Foundation.Cms.Blocks
                 else if (linkName.Contains("/v/"))
                 {
                     linkName = linkName.Replace("/watch?v=", "/embed/");
+                }
+                else if (linkName.Contains("youtu.be/"))
+                {
+                    linkName = linkName.Replace("youtu.be/", "youtube.com/embed/");
+                }
+
+                if (linkName.Contains("&") && !linkName.Contains("?"))
+                {
+                    int index = linkName.IndexOf("&");
+                    linkName = linkName.Substring(0, index) + "?" + linkName.Substring(index + 1);
+                }
+
+                if (linkName.Contains("http://"))
+                {
+                    linkName = linkName.Replace("http://", "https://");
                 }
 
                 return linkName;
