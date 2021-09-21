@@ -95,6 +95,8 @@ namespace Foundation
             services.Configure<OrderOptions>(o => o.DisableOrderDataLocalization = true);
             services.Configure<FindUIOptions>(x => x.ClientSideResourceBaseUrl = "https://stage.dl.episerver.net/$version$/");
 
+            //disable websockets, to avoid error in edit mode
+            services.Configure<UIOptions>(o => o.WebSocketEnabled = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
