@@ -20,7 +20,7 @@ namespace Foundation.Features.Media
             _contextModeResolver = contextModeResolver;
         }
 
-        public override IViewComponentResult Invoke(MediaData currentContent)
+        protected override IViewComponentResult InvokeComponent(MediaData currentContent)
         {
             switch (currentContent)
             {

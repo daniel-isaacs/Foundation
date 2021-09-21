@@ -19,7 +19,7 @@ namespace Foundation.Features.Search.Category
         }
 
         [AcceptVerbs(new string[] { "GET", "POST" })]
-        public override IViewComponentResult Invoke(GenericNode currentContent)
+        protected override IViewComponentResult InvokeComponent(GenericNode currentContent)
         {
             var viewmodel = GetSearchModel(currentContent);
             return View("_Category", viewmodel);

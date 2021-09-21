@@ -11,7 +11,7 @@ namespace Foundation.Features.Blocks
     [TemplateDescriptor(Inherited = true)]
     public class DefaultBlockController : BlockComponent<FoundationBlockData>
     {
-        public override IViewComponentResult Invoke(FoundationBlockData currentBlock)
+        protected override IViewComponentResult InvokeComponent(FoundationBlockData currentBlock)
         {
             var model = CreateModel(currentBlock);
             var blockName = currentBlock.GetOriginalType().Name;
